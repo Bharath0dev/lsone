@@ -304,7 +304,7 @@ useEffect(()=>{
 
       <View>
         <View>
-            <Text style={styles.serviceHeading}>Mounting Services</Text>
+            <Text style={styles.serviceHeading}>Mounting & Installation Services</Text>
         </View>
         <View style={styles.servicesContainer}>
             <FlatList

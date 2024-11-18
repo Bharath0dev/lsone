@@ -13,6 +13,9 @@ const ServicesScreen = ({ route }) => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+
   // const [numColumns, setNumColumns] = useState(2);
 
   const getServices = async () => {
@@ -51,6 +54,21 @@ if (error) {
   );
 }
 
+
+    // Function to truncate description and show only the first 20 words
+    const getTruncatedDescription = (description) => {
+      const words = description.split(' ');
+      if (words.length > 20) {
+          return words.slice(0, 20).join(' ') + '...';
+      }
+      return description;
+  };
+
+  const toggleDescription = () => {
+      setIsDescriptionExpanded(!isDescriptionExpanded);
+  };
+
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -65,7 +83,21 @@ if (error) {
                   </View>
                   <View style={styles.serviceText}> 
                     <Text style={styles.serviceName}>{item.serviceName}</Text>
-                    <Text style={styles.description}>{item.description}</Text>
+                    {/* <Text style={styles.description}>{item.description}</Text> */}
+
+                    <View style={styles.description}>
+                      <Text style={{ fontSize: 13, color: '#333', fontWeight: '400' }}>
+                          {isDescriptionExpanded ? item.description : getTruncatedDescription(item.description)}
+                          {item.description.split(' ').length > 20 && (
+                          <TouchableOpacity onPress={toggleDescription}>
+                              <Text style={{ color: 'blue',marginBottom: -4 }}>
+                                  {isDescriptionExpanded ? 'See Less' : ' See More'}
+                              </Text>
+                          </TouchableOpacity>
+                          )}
+                      </Text>
+                    </View>
+
                     <Text style={styles.price}>
                     <FontAwesome name='rupee' size={14} color='black' />{' '}
                       {item.price}</Text>

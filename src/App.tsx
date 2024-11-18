@@ -44,6 +44,7 @@ import OnHoldProviderScreen from './screens/Provider/OnHoldProviderScreen';
 import ProviderTab from './Navigations/ProviderNav';
 import CustomerTab from './Navigations/CustomerNav';
 import StarRatingComponent from './components/StarRatingComponent';
+import DeactivatedUserScreen from './screens/DeactivatedUserScreen';
 
 
 
@@ -110,6 +111,7 @@ const GetStartedNav = ()=>{
       <Stack.Screen name='HomePage' component={CustomerTab}/>
       <Stack.Screen name='ProviderTab' component={ProviderTab}/>
       <Stack.Screen name='OnHoldProviderScreen' component={OnHoldProviderScreen}/>
+      <Stack.Screen  name='DeactivatedUser' component={DeactivatedUserScreen}/>
       <Stack.Screen name='AdminScreen' component={AdminNav}/>
       <Stack.Screen name='Register' component={RegisterPage}/>
     </Stack.Navigator>

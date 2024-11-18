@@ -180,6 +180,11 @@ const ProviderAvailabilityScreen = () => {
           )}
           keyExtractor={(item) => item} // Assuming each item is unique
           ItemSeparatorComponent={() => <View style={styles.separator} />}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+                <Text style={styles.emptyText}>No Leaves</Text>
+            </View>
+        }     
         />
       </View>
 
@@ -243,6 +248,15 @@ const styles = StyleSheet.create({
       buttonText: {
         color: 'white',
         fontSize: 15,
+      },
+      emptyContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 150,
+      },
+      emptyText: {
+        fontSize: 18,
+        color: 'gray',
       },
 });
 

@@ -46,6 +46,9 @@ const imageMap = {
     'Appliance Removal': require('../assets/serviceImages/Appliance-Removal.jpg'),
     'Furniture Movers': require('../assets/serviceImages/Furniture-Movers.jpg'),
     'Storage Unit Movers': require('../assets/serviceImages/Storage-Unit-Movers.jpg'),
+
+    'Tree Trimming Service': require('../assets/serviceImages/Tree-Trimming-Service.jpg'),
+    'Weed Removal': require('../assets/serviceImages/Weed-Removal-Service.jpeg'),
 }
 
 

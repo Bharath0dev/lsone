@@ -1,10 +1,13 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import { useNavigation } from '@react-navigation/native';
 
 const Categories = () => {
     const [categories, setCategories] = useState([]);
+
+    const navigation = useNavigation();
 
     const getCategories = async () => {
         const response = await axios.get('http://192.168.1.218:4021/getCategories');
@@ -37,7 +40,9 @@ const Categories = () => {
                 data={categories}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => (
-                    <View style={ styles.categorycard}>
+                    <TouchableOpacity style={ styles.categorycard}
+                    onPress={()=> navigation.navigate('ServicesScreen', { category: item.category })}
+                    >
                         <View>
                             <Text style={ styles.categoryTitle}>{item.category}</Text>
                             <Text style={ styles.categoryServices}>{item.count} services</Text>
@@ -50,7 +55,7 @@ const Categories = () => {
                             style={styles.arrow}
                             />
                         </View>
-                    </View>
+                    </TouchableOpacity>
                 )}
             />
         </View>
@@ -79,7 +84,8 @@ const styles = StyleSheet.create({
     categoryTitle:{
         fontSize: 20,
         fontWeight: 'bold',
-        color:'#52be80',
+        // color:'#52be80',
+        color: '#055240',
         marginHorizontal: 15
     },
     categoryServices:{

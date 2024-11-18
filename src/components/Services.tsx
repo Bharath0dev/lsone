@@ -590,6 +590,9 @@ const Services = () => {
     const [showUpdateServicesModal, setShowUpdateServicesModal] = useState(false);
     const [selectedService, setSelectedService] = useState(null);
 
+    const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+
+
     const getServices = async () => {
         try {
             const response = await axios.get('http://192.168.1.218:4021/get-services-ad');
@@ -641,6 +644,21 @@ const Services = () => {
         setShowUpdateServicesModal(true);
     };
 
+
+    // Function to truncate description and show only the first 20 words
+    const getTruncatedDescription = (description) => {
+        const words = description.split(' ');
+        if (words.length > 15) {
+            return words.slice(0, 15).join(' ') + '...';
+        }
+        return description;
+    };
+
+    const toggleDescription = () => {
+        setIsDescriptionExpanded(!isDescriptionExpanded);
+    };
+    
+
     return (
         <View style={styles.container}>
             <View style={styles.flatlistContainer}>
@@ -656,7 +674,21 @@ const Services = () => {
 
                                 <View style={styles.serviceItem}>
                                     <Text style={styles.serviceName}>{item.serviceName}</Text>
-                                    <Text style={styles.description}>{item.description}</Text>
+                                    {/* <Text style={styles.description}>{item.description}</Text> */}
+
+                                    <View style={styles.description}>
+                                    <Text style={{ fontSize: 13, color: '#333', fontWeight: '400' }}>
+                                        {isDescriptionExpanded ? item.description : getTruncatedDescription(item.description)}
+                                        {item.description.split(' ').length > 15 && (
+                                        <TouchableOpacity onPress={toggleDescription}>
+                                            <Text style={{ color: 'blue',marginBottom: -4 }}>
+                                                {isDescriptionExpanded ? 'See Less' : ' See More'}
+                                            </Text>
+                                        </TouchableOpacity>
+                                        )}
+                                    </Text>
+                                    </View>
+
                                     <Text style={styles.category}>{item.category}</Text>
                                     <Text style={styles.servicePrice}>
                                         <FontAwesome name='rupee' size={15} style={styles.rupeeIcon}/>

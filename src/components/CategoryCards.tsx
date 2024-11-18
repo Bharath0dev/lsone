@@ -62,12 +62,12 @@ const CategoryCards = () => {
         <View style={styles.cardTwo}>
             <TouchableOpacity 
             style={styles.cardContainer}
-            onPress={()=> navigation.navigate('ServicesScreen', { category: 'Moving Services' })}
+            onPress={()=> navigation.navigate('ServicesScreen', { category: 'Gardening Services' })}
             >
                 <View style={styles.card}>
-                <Image style={[styles.cardImage, {height: 55, width: 55}]} source={require('../assets/Moving-Services.png')} />
+                <Image style={[styles.cardImage, {height: 55, width: 55}]} source={require('../assets/Yard_work.png')} />
                 </View>
-                <Text style={styles.cardText}>Moving Services</Text>
+                <Text style={styles.cardText}>Gardening Services</Text>
             </TouchableOpacity>
 
            

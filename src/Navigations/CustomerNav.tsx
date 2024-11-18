@@ -16,6 +16,7 @@ import Bookings from '../screens/Bookings';
 import ProviderDetailsScreen from '../screens/ProviderDetailsScreen';
 import NotificationsScreen from '../screens/NotificationsScreen';
 import LoginPage from '../screens/loginandregister/Login';
+import DeactivatedUserScreen from '../screens/DeactivatedUserScreen';
 
 
 const CustomerStack = ()=>{
@@ -33,6 +34,7 @@ const CustomerStack = ()=>{
       <Stack.Screen name='searchScreen' component={SearchScreen}/>
       <Stack.Screen name='ProviderDetailsScreen' component={ProviderDetailsScreen}/>
       <Stack.Screen  name='NotificationScreen' component={NotificationsScreen}/>
+      <Stack.Screen  name='DeactivatedCustomer' component={DeactivatedUserScreen}/>
       {/* <Stack.Screen name='LoginC' component={LoginPage}/> */}
 
     </Stack.Navigator>

@@ -59,6 +59,8 @@ const OnHoldProviderScreen = ({route}) => {
         const [address, setAddress] = useState('');
         const [experience, setExperience] = useState('');
         const [services, setServices] = useState('');
+        const [description, setDescription] = useState('');
+
         const navigation = useNavigation();
 
         const handleSubmit = async (address, experience) => {
@@ -133,6 +135,24 @@ const OnHoldProviderScreen = ({route}) => {
                             keyboardType='numeric'
                             placeholder='Enter your experience (Ex. 0.6 for months)'
                         />
+
+                        <Text>Description</Text>
+                        <TextInput
+                            style={{
+                                borderColor: "#00634B",
+                                borderWidth: 1,
+                                borderRadius: 9,
+                                margin: 10,
+                                height: 50,
+                                fontSize: 13,
+                                // width: '80%',
+                            }}
+                            onChangeText={setDescription}
+                            multiline={true}
+                            placeholder='Describe yourself..'
+                        />
+
+
                         <Text>Your Address</Text>
                         <TextInput
                             style={{
@@ -141,12 +161,13 @@ const OnHoldProviderScreen = ({route}) => {
                                 borderRadius: 9,
                                 margin: 10,
                                 height: 50,
-                                fontSize: 16,
+                                fontSize: 13,
                                 // width: '80%',
                             }}
                             onChangeText={setAddress}
                             multiline={true}
-                            numberOfLines={3}
+                            // numberOfLines={3}
+                            placeholder='Enter your address'
                         />
 
                         <TouchableOpacity style={styles.button}

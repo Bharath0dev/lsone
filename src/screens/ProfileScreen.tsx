@@ -120,7 +120,19 @@ function ProfileScreen() {
     <ScrollView showsVerticalScrollIndicator={false}>
       <View>
 
-        <View style={styles.profileImageView}>
+      {userData && userData.role != 'Admin' ?(
+            <View style={styles.profileImageView}>
+
+              <Image 
+                style={styles.profileImage} 
+                source={userData.profileImage
+                  ? { uri: `http://192.168.1.218:4021/${userData.profileImage}` } 
+                  : require('../assets/userProfilePic.png')} 
+              />
+            </View>
+        ):(null)}
+
+        {/* <View style={styles.profileImageView}>
 
           <Image 
             style={styles.profileImage} 
@@ -128,7 +140,7 @@ function ProfileScreen() {
               ? { uri: `http://192.168.1.218:4021/${userData.profileImage}` } 
               : require('../assets/userProfilePic.png')} 
           />
-        </View>
+        </View> */}
 
           <View style={styles.nameView}>
             <Text style={styles.userName}>{userData.name}</Text>

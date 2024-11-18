@@ -15,6 +15,7 @@ import ProviderAvailabilityScreen from '../screens/Provider/ProviderAvailability
 import NotificationsScreen from '../screens/NotificationsScreen';
 import OnHoldProviderScreen from '../screens/Provider/OnHoldProviderScreen';
 import LoginPage from '../screens/loginandregister/Login';
+import DeactivatedUserScreen from '../screens/DeactivatedUserScreen';
 
 const ProviderStack = () =>{
   const Stack = createNativeStackNavigator();
@@ -26,6 +27,8 @@ const ProviderStack = () =>{
         <Stack.Screen  name='ProviderScreen' component={ProviderScreen}/>
         <Stack.Screen  name='NotificationScreenPro' component={NotificationsScreen}/>
         <Stack.Screen  name='OnHoldProviderScreen' component={OnHoldProviderScreen}/>
+        <Stack.Screen  name='DeactivatedProvider' component={DeactivatedUserScreen}/>
+        
         {/* <Stack.Screen name='Profile' component={ProfileNav}/>
         <Stack.Screen name='Bookings' component={Bookings}/>
         <Stack.Screen name='servicesPro' component={ProviderServices}/> */}

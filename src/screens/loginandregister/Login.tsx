@@ -47,15 +47,22 @@ const LoginPage = () => {
         await AsyncStorage.setItem('role', response.data.role);
         await AsyncStorage.setItem('isLoggedIn', JSON.stringify(true));
 
+
+        
         if(response.data.role === 'Admin' ){
           navigation.navigate('AdminScreen');
         }
         else if(response.data.role === 'Customer'){
+          if(response.data.accountStatus === 'deactivated'){
+            navigation.navigate('DeactivatedUser')
+          }
           navigation.navigate('HomePage')
         }
         else if(response.data.role === 'ServiceProvider'){
           if(response.data.accountStatus === 'inactive'){
             navigation.navigate('OnHoldProviderScreen', {email: response.data.userEmail});
+          }else if(response.data.accountStatus === 'deactivated'){
+            navigation.navigate('DeactivatedUser')
           }else{
             navigation.navigate('ProviderTab');
           }
