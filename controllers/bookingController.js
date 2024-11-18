@@ -127,7 +127,7 @@ exports.bookingDataByUserId = async(req, res)=>{
 
         if(userRole === 'Customer'){
             bookings = await Booking.find({ customerId: userId })
-            .select('status scheduledDate scheduledTime serviceId bookingId')
+            .select('status scheduledDate preferredTime serviceId bookingId')
             .populate({
                 path:'providerId',
                 select: 'name email role'
@@ -139,7 +139,7 @@ exports.bookingDataByUserId = async(req, res)=>{
             res.json({bookings});
         }else if(userRole === 'ServiceProvider'){
             bookings = await Booking.find({ providerId: userId })
-            .select('status scheduledDate scheduledTime serviceId bookingId')
+            .select('status scheduledDate preferredTime serviceId bookingId')
             .populate({
                 path:'customerId',
                 select: 'name email role'
@@ -308,7 +308,7 @@ exports.bookingDataBycustomerIdAndProviderId = async (req, res) => {
 exports.getBookingCount = async (req, res) => {
     try{
         const result = await Booking.find({});
-        // const count = result.length;
+        const count = result.length;
 
         res.send({count});
     }catch(error){
