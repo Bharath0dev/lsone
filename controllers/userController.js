@@ -182,7 +182,6 @@ exports.updateUser = async (req, res) => {
             } else {
                 // If serviceImages is empty, update only the basic fields (no provider images)
                 // console.log('kya2',req.body, finalProfileImagePath);
-                console.log('Hi');
                 await User.updateOne({
                     email: email
                 },{
@@ -197,7 +196,7 @@ exports.updateUser = async (req, res) => {
                 });
             }
         }
-        console.log('Hlo');
+
         res.send({ status: 'ok', data: 'updated' });
     } catch (error) {
         console.log(error);
@@ -362,16 +361,16 @@ exports.updateAccountStatus = async (req, res) => {
 };
 
 exports.updateOnHoldProviderData = async (req, res) => {
-    const {address, experience, email, services} = req.body;
+    const {address, experience, email, services, description} = req.body;
 
-    if( !address || !experience || !email ){
+    if( !address || !experience || !email || !description ){
         console.log('no  values');
         return;
     }
     try{
         const result = await User.findOneAndUpdate(
             {email: email},
-            {$set: { address: address, 'providerDetails.experience': experience, 'providerDetails.preferences': services}}
+            {$set: { address: address, 'providerDetails.experience': experience, 'providerDetails.preferences': services, 'providerDetails.description': description}}
         );
         console.log(result);
         if(result){

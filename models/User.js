@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema({
       type: [String],
       default: null,
     },
-    qualifications: {
+    experience: {
       type: String,
       default: null
     },
@@ -55,6 +55,7 @@ const userSchema = new mongoose.Schema({
       default: null
     },
     preferences: String,
+    description: String,
     rating: {
       type: String,
       default: null
