@@ -129,7 +129,7 @@ const ProviderDetailsScreen = ({ route }) => {
 
   useEffect(() => {
     console.log('providerServiceImages:', providerServiceImages);
-}, [providerServiceImages]);
+  }, [providerServiceImages]);
 
 const ProviderReviewsData = ({ providerId }) => {
 
@@ -237,7 +237,11 @@ const formatDateTime = (timestamp) => {
           </ScrollView>
         )
 })
-      ) : (null)}
+      ) : (
+        <View style={{alignItems: 'center', margin: 20}}>
+          <Text>No reviews</Text>
+        </View>
+      )}
     </View>
   )
 }
@@ -306,10 +310,17 @@ const handleProceedToBook = () => {
         <View style={{alignItems: 'center'}}>
           {/* Display only stars */}
           {providerData?.providerDetails?.rating !== undefined ? (
-            <View>
+            providerData?.providerDetails?.rating == null ? (
+              <View style={{marginTop: 20}}>
+                <Text>No Ratings</Text>
+              </View>
+            ) : (
+              <View>
                 <Text>{<StarRatingComponent rating={providerData.providerDetails.rating} displayType="stars" />}</Text>
                 <Text>{<StarRatingComponent rating={providerData.providerDetails.rating} displayType="rating" />}</Text>
-            </View>
+              </View>
+            )
+            
           ) : (
             <Text>Loading...</Text> // Show loading or placeholder if rating is not available
           )}

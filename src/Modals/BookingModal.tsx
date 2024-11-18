@@ -70,8 +70,10 @@ const BookingModal = ({ visible, onClose, customerId, serviceId, providerId }) =
         try {
             const response = await axios.get('http://192.168.1.218:4021/getDatesToHide', { params: { providerId } });
             setDatesToHide(response.data.unAvailableDates);
+            setDatesToHide(response.data.unAvailableDates || []);
         } catch (error) {
             console.log('Error while getting dates to hide:', error);
+            // setDatesToHide([]);
         }
     };
 
@@ -127,9 +129,15 @@ const BookingModal = ({ visible, onClose, customerId, serviceId, providerId }) =
         [selectedDate]: { selected: true, marked: true, selectedColor: 'blue' }
     };
 
-    datesToHide.forEach(date => {
-        markedDates[date] = { disabled: true, color: 'lightgrey' }; // Use light grey for disabled dates
-    });
+    // datesToHide.forEach(date => {
+    //     markedDates[date] = { disabled: true, color: 'lightgrey' }; // Use light grey for disabled dates
+    // });
+
+    if (Array.isArray(datesToHide)) {
+        datesToHide.forEach(date => {
+            markedDates[date] = { disabled: true, color: 'lightgrey' };
+        });
+    }
 
     return (
         <View style={styles.container}>

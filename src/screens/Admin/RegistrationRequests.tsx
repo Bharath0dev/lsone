@@ -57,11 +57,43 @@ const renderFooter = () => {
       renderItem={({item})=>(
         <View style={styles.flatlistContainer}>
             <View style={styles.flatlistText}>
-                <Text>{item.name}</Text>
-                <Text>{item.email}</Text>
-                <Text>{item.mobile}</Text>
-                <Text>{item.providerDetails.preferences}</Text>
-                <Text>{item.address}</Text>
+                <View style={styles.detailView}>
+                    <Text style={styles.detailText}>Name: </Text>
+                    <Text>{item.name}</Text>
+                </View>
+               
+               <View style={styles.detailView}>
+                    <Text style={styles.detailText}>Email: </Text>
+                    <Text>{item.email}</Text>
+               </View>
+                
+                <View style={styles.detailView}>
+                    <Text style={styles.detailText}>Mobile: </Text>
+                    <Text>{item.mobile}</Text>
+                </View>
+                
+
+                <View style={styles.detailView}>
+                    <Text style={styles.detailText}>Services: </Text>
+                    <Text>{item.providerDetails.preferences}</Text>
+                </View>
+                
+
+                <View style={styles.detailView}> 
+                    <Text style={styles.detailText}>Experience:</Text>
+                    <Text>{item.providerDetails.experience}</Text>
+                </View>
+                
+                <View style={[styles.detailView, {width: '75%'}]}>
+                    <Text style={styles.detailText}>Description:</Text>
+                    <Text>{item.providerDetails.description}</Text>
+                </View>
+                
+                <View style={styles.detailView}>
+                    <Text style={styles.detailText}>Address:</Text>
+                    <Text>{item.address}</Text>
+                </View>
+                
             </View>
             <View style={styles.buttons}>
                 <Button onPress={()=>handleResponse('rejected', item._id)}>Reject</Button>
@@ -108,4 +140,13 @@ const styles = StyleSheet.create({
         color: '#333',
         fontSize: 16,
     },
+    detailView:{
+        flexDirection: 'row',
+        columnGap: 8,    
+    },
+    detailText: {
+        fontSize: 15,
+        color: '#333',
+        fontWeight: '500',
+    }
 })

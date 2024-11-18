@@ -73,6 +73,7 @@ const OnHoldProviderScreen = ({route}) => {
                 experience: experience,
                 email: userEmail,
                 services: services,
+                description: description,
             }
             try{
                 const response = await axios.patch('http://192.168.1.218:4021/updateOnHoldProviderData', data)
