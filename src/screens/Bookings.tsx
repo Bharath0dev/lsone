@@ -1,5 +1,5 @@
 
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useCallback, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -125,10 +125,11 @@ const Bookings = () => {
         genBookingId: genBookingId,
       });
 
-      getBookings();
-      console.log('Status updated successfully:', response.data);
+      console.log('Status updated:', response.data);
+      getBookings(); 
     } catch (error) {
-      console.error('Error updating status:', error);
+      console.error('Error updating booking:', error);
+      Alert.alert('Error updating booking, please try again!');
     }
   };
 
@@ -155,9 +156,8 @@ const Bookings = () => {
   };
 
   useEffect(() => {
-    // Set default to show all bookings on first load
     handleFlatlist('all');
-  }, [bookingData]); // Ensure it runs when bookingData is updated
+  }, [bookingData]); 
 
 // Function to format the date and time from the createdAt field
 const formatDateTime = (timestamp) => {

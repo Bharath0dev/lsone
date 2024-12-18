@@ -195,7 +195,7 @@ const ProviderAvailabilityScreen = () => {
         labelStyle={styles.buttonText}
         onPress={handleCalendar}
       >
-        Add More Leaves
+        Add Leaves
       </Button>
       }
         

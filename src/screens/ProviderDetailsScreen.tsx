@@ -105,6 +105,7 @@ const ProviderDetailsScreen = ({ route }) => {
         console.log(service_Id);
     })
 
+
     const getProviderDetails = async () => {
       const response = await axios.get('http://192.168.1.218:4021/getProviderDetails', {params: {providerId:providerId}})
         console.log('consoling providerData in ProviderDetailsScreen: ',response.data);
@@ -300,41 +301,75 @@ const handleProceedToBook = () => {
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
         <Text style={styles.header}>Provider Details</Text>
       </View>
-      <View style={{flexDirection:'row', justifyContent: 'space-between',  marginHorizontal: 15}}>
-        <View>
-            <Text style={styles.flatlistText}>{providerData.name}</Text>
-            <Text style={styles.flatlistText}>{providerData.email}</Text>
-            <Text style={styles.flatlistText}>{providerData.mobile}</Text>
-            {/* <Text style={styles.flatlistText}>{providerData.providerDetails.rating}</Text> */}
+      <View>
+          <View style={{flexDirection:'row', justifyContent: 'space-between',  marginHorizontal: 15}}>
+            <View>
+              <Text style={styles.flatlistText}>{providerData.name}</Text>
+              <Text style={styles.flatlistText}>{providerData.email}</Text>
+              <Text style={styles.flatlistText}>{providerData.mobile}</Text>
+            </View>
+            <View style={{alignItems: 'center'}}>
+              {providerData?.providerDetails?.rating !== undefined ? (
+                providerData?.providerDetails?.rating == null ? (
+                  <View style={{marginTop: 20}}>
+                    <Text>No Ratings</Text>
+                  </View>
+                ) : (
+                  <View>
+                    <Text>{<StarRatingComponent rating={providerData.providerDetails.rating} displayType="stars" />}</Text>
+                    <Text>{<StarRatingComponent rating={providerData.providerDetails.rating} displayType="rating" />}</Text>
+                  </View>
+                )
+                
+              ) : (
+                <Text>Loading...</Text> // Show loading or placeholder if rating is not available
+              )}
+          </View>
         </View>
-        <View style={{alignItems: 'center'}}>
-          {/* Display only stars */}
-          {providerData?.providerDetails?.rating !== undefined ? (
-            providerData?.providerDetails?.rating == null ? (
-              <View style={{marginTop: 20}}>
-                <Text>No Ratings</Text>
-              </View>
-            ) : (
-              <View>
-                <Text>{<StarRatingComponent rating={providerData.providerDetails.rating} displayType="stars" />}</Text>
-                <Text>{<StarRatingComponent rating={providerData.providerDetails.rating} displayType="rating" />}</Text>
-              </View>
-            )
-            
-          ) : (
-            <Text>Loading...</Text> // Show loading or placeholder if rating is not available
-          )}
+        <View style={{marginHorizontal: 15,}}>
+          {/* {providerData.providerDetails.experience ? (
+            <View style={{flexDirection: 'row', rowGap: 8}}>
+              <Text style={{fontSize: 15, color: '#333', fontWeight: '600'}}>Experience: </Text>
+              <Text style={{fontWeight: '500', color: '#333', marginTop: 2}}>{providerData.providerDetails.experience} years</Text>
+            </View>
+          ) : (null)}
+
+          {providerData.providerDetails.description ? (
+            <View style={{flexDirection: 'row', rowGap: 8}}>
+              <Text style={{fontSize: 15, color: '#333', fontWeight: '600'}}>Description: </Text>
+              <Text style={styles.flatlistTextDescription}>{providerData.providerDetails.description}</Text>
+            </View>
+          ) : (null)} */}
+
+          {providerData.providerDetails?.experience ? (
+            <View style={{flexDirection: 'row', rowGap: 8}}>
+              <Text style={{fontSize: 15, color: '#333', fontWeight: '600'}}>Experience: </Text>
+              <Text style={{fontWeight: '500', color: '#333', marginTop: 2}}>{providerData.providerDetails.experience} years</Text>
+            </View>
+          ) : null}
+
+          {providerData.providerDetails?.description ? (
+            <View style={{flexDirection: 'row', rowGap: 8}}>
+              <Text style={{fontSize: 15, color: '#333', fontWeight: '600'}}>Description: </Text>
+              <Text style={styles.flatlistTextDescription}>{providerData.providerDetails.description}</Text>
+            </View>
+          ) : null}
+
+          
         </View>
 
       </View>
         
-        <View>
-            <View style={{marginTop: 15}}>
+        <View style={{marginTop: 15}}>
+            <View style={{borderWidth: 0.2, borderColor: 'grey', marginHorizontal: 15, marginVertical: 15}}>
+
+            </View>
+            <View >
               <Text style={{fontSize: 18, color: '#333', fontWeight: '500', textAlign: 'center'}}>Reviews</Text>
             </View>
-          <View>
-            <ProviderReviewsData providerId={providerId} />
-          </View>
+            <View>
+              <ProviderReviewsData providerId={providerId} />
+            </View>
         </View>
         
       
@@ -453,4 +488,9 @@ const styles = StyleSheet.create({
       padding: 10,
       borderRadius: 8,
     },
+    flatlistTextDescription:{
+      margin: 3,
+      fontSize: 13,
+      width: '75%'
+    }
 })

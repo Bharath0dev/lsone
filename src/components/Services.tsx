@@ -708,6 +708,12 @@ const Services = () => {
                             </View>
                         </View>
                     )}
+                    ListEmptyComponent={
+                        <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 100}}>
+                            <Text>No services available</Text>
+                        </View>
+                    
+                } 
                 />
                 
             </View>

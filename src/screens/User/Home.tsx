@@ -17,6 +17,7 @@ import SearchBar  from '../../components/SearchBar';
 
 const Home = () => {
 
+  const [token, setToken] = useState('');
   const [userId, setUserId] = useState('');
   const [userData, setUserData] = useState('');
   const [alertShown, setAlertShown] = useState(false);
@@ -32,22 +33,29 @@ const Home = () => {
   const navigation = useNavigation();
   const baseURL = 'http://192.168.1.218:4021/';
 
+  const getToken = async () => {
+    const tokenFromStorage = await AsyncStorage.getItem('token');
+    console.log("token in Homepage : ",tokenFromStorage);
+    setToken(tokenFromStorage);
+    console.log(tokenFromStorage);
+  }
+
+  useEffect(()=>{
+    getToken();
+  }, [])
+
   const  getData = async () =>{
-    const token = await AsyncStorage.getItem('token');
-    console.log("token in Homepage : ",token);
-
-    console.log(token);
-
     const res = await axios.post('http://192.168.1.218:4021/userdata', {token: token})
         console.log(res.data);
         setUserData(res.data.data);
         setUserId(res.data.data._id);
         await setData(res.data.data);
+        // if (res.data && res.data.data) {
+        //   setUserData(res.data.data);
+        //   setUserId(res.data.data._id);
+        //   await setData(res.data.data);
+        // }
   }
-
-  // useEffect(()=>{
-  //   console.log('profile image ',userData.profileImage);
-  // })
 
   const getAsyncData = async () => {
     const userId = await AsyncStorage.getItem('userId');
@@ -66,9 +74,10 @@ const Home = () => {
       console.log('userData is not available or does not have a name');
     }
   }
-  useEffect(() => {
-   getData();
-  }, []);
+  
+  useEffect(()=>{
+    getData();
+  }, [token])
   
   const getCleaningServices = async ()=>{
     const category = "Cleaning";
@@ -87,7 +96,7 @@ const Home = () => {
   }
 
   const getRepairingServices = async ()=>{
-    const category = "Repairing";
+    const category = "Repair Services";
 
     const response = await axios.get('http://192.168.1.218:4021/get-services', { params: { category }})
     console.log(response.data);
@@ -237,7 +246,7 @@ useEffect(()=>{
             <View style={{}}>
                 <Image 
                   style={styles.profileImage} 
-                  source={userData.profileImage
+                  source={userData && userData.profileImage
                     ? { uri: `http://192.168.1.218:4021/${userData.profileImage}` } 
                     : require('../../assets/userProfilePic.png')} 
                 />
@@ -246,7 +255,9 @@ useEffect(()=>{
             <View style={{flexDirection: 'row', alignItems: 'baseline', justifyContent: 'center', marginHorizontal: 10}}>
                 <Text style={styles.greet}>Hi,</Text>
                 <Text>{' '}</Text>
-                <Text style={styles.userName}>{userData.name}</Text> 
+                {/* <Text style={styles.userName}>{userData.name}</Text>  */}
+                <Text style={styles.userName}>{userData && userData.name ? userData.name : ''}</Text>
+
             </View>
 
           </View>
