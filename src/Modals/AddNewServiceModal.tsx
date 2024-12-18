@@ -106,12 +106,14 @@ const AddNewServiceModal = ({visible, onClose,}) => {
                         placeholder="Enter Service Name"
                         value={serviceName}
                         onChangeText={setServiceName}
+                        multiline={true}
                     />
                     <TextInput
                         style={styles.input}
                         placeholder="Enter Description"
                         value={description}
                         onChangeText={setDescription}
+                        multiline={true}
                     />
 
                     <TextInput
@@ -128,6 +130,7 @@ const AddNewServiceModal = ({visible, onClose,}) => {
                         placeholder="Enter New Category"
                         value={category}
                         onChangeText={setCategory}
+                        multiline={true}
                         />
                     ) : (
                     <View style={styles.dropdownContainer}>

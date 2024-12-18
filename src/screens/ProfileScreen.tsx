@@ -191,21 +191,22 @@ function ProfileScreen() {
             </View>
           </View>
 
-          {userData && userData.role == 'ServiceProvider' ? (
-
-          <View>
-              {/* <View style={styles.infoMain}>
+          {userData && userData.role != 'Admin' ?(
+            <View style={[styles.infoMain, ]}>
               <View style={styles.infoCont}>
                 <View style={[styles.infoIconCont, {backgroundColor: '#52be80'}]}>
                   <Location name="location-on" size={24} style={{color: 'white'}} />
                 </View>
                 <View style={styles.infoText}>
-                  <Text style={styles.infoSmall_Text}>Services</Text>
-                  <Text style={styles.infoLarge_Text}>{userData.services}</Text>
+                  <Text style={styles.infoSmall_Text}>Address</Text>
+                  <Text style={styles.infoLarge_Text}>{userData.address}</Text>
                 </View>
               </View>
-              </View> */}
-              
+            </View>
+          ):(null)}
+
+          {userData && userData.role == 'ServiceProvider' ? (
+          <View>              
             <View>
               <Text style={styles.infoServiceImageText}>Service Images</Text>
               {images.length > 0 ? (
@@ -228,20 +229,12 @@ function ProfileScreen() {
           ) : (null)}
         </View>
 
+        
+
+
         {userData && userData.role != 'Admin' ?(
           <View>
-              <View style={[styles.infoMain, {marginLeft: 25}]}>
-                <View style={styles.infoCont}>
-                  <View style={[styles.infoIconCont, {backgroundColor: '#52be80'}]}>
-                    <Location name="location-on" size={24} style={{color: 'white'}} />
-                  </View>
-                  <View style={styles.infoText}>
-                    <Text style={styles.infoSmall_Text}>Address</Text>
-                    <Text style={styles.infoLarge_Text}>{userData.address}</Text>
-                  </View>
-                </View>
-              </View>
-          <View>
+
             <Button
               style={styles.editIcon}
               labelStyle={styles.buttonText}
@@ -249,9 +242,10 @@ function ProfileScreen() {
                 navigation.navigate('UpdateProfile', {data: userData});}}
               > Edit Profile</Button>
           </View>
-          </View>
           
         ):(null)}
+
+
         <View>
           <Button
               style={styles.editIcon}

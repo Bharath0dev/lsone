@@ -43,8 +43,8 @@ const ProviderServices = () => {
 
         try {
             const response = await axios.get('http://192.168.1.218:4021/getServicesByProviders', { params: { id: userId } });
-            setServicesByProvider(response.data);
-            console.log('Services by provider:', response.data);
+            setServicesByProvider(response.data.data);
+            console.log('Services by provider:', response.data.data);
         } catch (error) {
             console.log('getServicesByProviders error:', error);
         }
@@ -108,7 +108,7 @@ const ProviderServices = () => {
                     // onPress={handleShowDropDown}
                     onPress={()=>setShowDropDown(true)}
                     >
-                        Add Another Service
+                        Add Service
                     </Button>
                 ):(null)}
                 

@@ -63,7 +63,7 @@ const OnHoldProviderScreen = ({route}) => {
 
         const navigation = useNavigation();
 
-        const handleSubmit = async (address, experience) => {
+        const handleSubmit = async () => {
             console.log(address, experience, userEmail);
             if(!experience || !address || !services){
                 Alert.alert('Please fill all fields');
@@ -172,7 +172,7 @@ const OnHoldProviderScreen = ({route}) => {
                         />
 
                         <TouchableOpacity style={styles.button}
-                        onPress={()=> handleSubmit(address, experience)}>
+                        onPress={()=> handleSubmit()}>
                             <Text style={styles.buttonText}>Submit</Text>
                         </TouchableOpacity>
                     </View>

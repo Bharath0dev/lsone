@@ -124,7 +124,7 @@ const ForgatPasswordScreen = () => {
             onChangeText={setPassword}
             // onChangeText={handlePassword}
             value={password}
-            secureTextEntry
+            secureTextEntry = {true}
             />
           </View>
         
@@ -134,7 +134,7 @@ const ForgatPasswordScreen = () => {
             placeholder='Confirm Password'
             onChangeText={setConfirmPassword}
             value={confirmPassword}
-            secureTextEntry
+            secureTextEntry={true}
             />
           </View>
 

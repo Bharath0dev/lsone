@@ -1,4 +1,4 @@
-import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, Modal } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button } from 'react-native-paper';
@@ -10,7 +10,7 @@ import StarRatingComponent from '../components/StarRatingComponent';
 
 const imageMap = {
     'Plumbing': require('../assets/serviceImages/Plumbing.jpg'),
-    'Carpentary': require('../assets/serviceImages/AC-Repair.jpg'),
+    'Carpentry': require('../assets/serviceImages/AC-Repair.jpg'),
 
     'AC Repair': require('../assets/serviceImages/AC-Repair.jpg'),
     'Washing Machine Repair': require('../assets/serviceImages/Washing-Machine-Repair.jpg'),
@@ -64,6 +64,8 @@ const ServiceProviders = ({ route }) => {
     const [serviceMainImageUri, setServiceMainImageUri] = useState('');
 
     const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+
+    const [showFilterModal, setShowFilterModal] = useState(false);
 
     const navigation = useNavigation();
 
@@ -127,6 +129,57 @@ const ServiceProviders = ({ route }) => {
     const toggleDescription = () => {
         setIsDescriptionExpanded(!isDescriptionExpanded);
     };
+
+    // const handleSortData = () =>{
+    //     console.log('sorted');
+    //     providers.filter((item)=> {
+    //         console.log(item.providerDetails.rating)
+    //     })
+    // }
+
+    const handleSortData = () => {
+        console.log('Sorting providers by rating');
+        // Sort the providers by rating in descending order
+        const sortedProviders = [...providers].sort((a, b) => {
+            // Ensure that the rating exists for both providers, and sort based on rating
+            const ratingA = a.providerDetails?.rating || 0;
+            const ratingB = b.providerDetails?.rating || 0;
+            return ratingB - ratingA;  // Sort in descending order
+        });
+    
+        // Update the state with the sorted data
+        setProviders(sortedProviders);
+        setShowFilterModal(false);
+    };
+    
+
+    const FilterModal = () => {
+
+        
+        return(
+                <Modal
+                    visible={showFilterModal}
+                    transparent={true} // Ensures the background is semi-transparent
+                    animationType="fade" // You can choose animation like fade, slide, etc.
+                >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContent}>
+                        <TouchableOpacity onPress={() => setShowFilterModal(false)} style={{alignItems: 'flex-end'}}>
+                            <Text style={styles.closeButton}>Close</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={()=>{ handleSortData()}} style={{borderWidth: 1, borderRadius: 8,padding: 10, marginVertical: 10, alignItems: 'center'}}>
+                            <Text style={{fontSize: 20, color: '#333', fontWeight: '600'}}>Sort By Rating</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                </Modal>
+        )
+    }
+
+    const handleShowModal = () => {
+        console.log('showing');
+        setShowFilterModal(true);
+    }
     
     return (
         <View style={styles.container}>
@@ -163,6 +216,9 @@ const ServiceProviders = ({ route }) => {
 
             <View style={styles.header}>
             <Text style={styles.headerText}>{serviceName} Providers</Text>
+            <TouchableOpacity onPress={()=>handleShowModal()}>
+                <Image source={ require('../assets/filter.png')} style={styles.filterImage}/>
+            </TouchableOpacity>
             </View>
 
             <View>
@@ -218,6 +274,7 @@ const ServiceProviders = ({ route }) => {
                     }       
                 />
             </View>
+            <FilterModal/>
         </View>
     );
 };
@@ -241,12 +298,18 @@ const styles = StyleSheet.create({
     },
     header:{
         height: 50,
-        justifyContent: 'center',
-        alignItems: 'center'
+        justifyContent: 'space-between',
+        // alignItems: 'center'
+        flexDirection: 'row',
+        marginHorizontal: 15
     },
     headerText:{
         fontSize: 19,
         fontWeight: 'bold'
+    },
+    filterImage:{
+        height: 30,
+        width: 30
     },
     flatlistText:{
         // margin: 10,
@@ -278,7 +341,28 @@ const styles = StyleSheet.create({
       description:{
         margin: 15,
         
-      }
+      },
+      modalOverlay: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.3)', 
+    },
+    modalContent: {
+        backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 10,
+        // alignItems: 'center',
+        // justifyContent: 'center',
+        width: '80%',
+        // height: 200,
+    },
+    // Close button styling
+    closeButton: {
+        fontSize: 16,
+        color: 'blue',
+        fontWeight: 'bold',
+    },
 });
 
 export default ServiceProviders;

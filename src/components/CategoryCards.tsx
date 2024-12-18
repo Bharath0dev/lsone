@@ -40,7 +40,7 @@ const CategoryCards = () => {
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.cardContainer}
-            onPress={()=> navigation.navigate('ServicesScreen', { category: 'Repairing' })}
+            onPress={()=> navigation.navigate('ServicesScreen', { category: 'Repair Services' })}
             >
                 <View style={styles.card}>
                 <Image style={styles.cardImage} source={require('../assets/repairing.png')} />
@@ -74,7 +74,7 @@ const CategoryCards = () => {
 
             <TouchableOpacity 
             style={styles.cardContainer}
-            onPress={()=> navigation.navigate('ServicesScreen', { category: 'Painting' })}
+            onPress={()=> navigation.navigate('ServicesScreen', { category: 'Painting Services' })}
             >
                 <View style={styles.card}>
                 <Image style={styles.cardImage} source={require('../assets/painting.png')} />
