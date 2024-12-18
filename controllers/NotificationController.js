@@ -12,21 +12,25 @@ const anyIsReadTrue = (result) => {
 exports.getNotifications = async (req, res) => {
     const { userId } = req.query;
 
+    if (!userId) {
+        return res.status(400).send({ message: "User ID is required." });
+    }
+
     console.log('Received request with userId:', userId);
     try{
         const result = await Notification.find({receiverId: userId});
-        // console.log('getNotifications',result);
-        if (!result || result.length == 0) {
-            return res.status(404).send({ message: "No notifications found for this user." });
+        if (result.length === 0) {
+            return res.status(200).send({ 
+                result: [], 
+                isReadStatus: false, 
+                message: "No notifications found for this user." 
+            });
         }
-
         const isReadStatus = anyIsReadTrue(result);
-        
-        // console.log(result, result.length, isReadStatus);
-        
-        res.send({result, isReadStatus});
+        return res.status(200).send({ result, isReadStatus });
     }catch(error){
         console.log('error while finding notifications', error);
+        return res.status(500).send({ message: "Internal server error. Please try again later." });
     }
 }
 

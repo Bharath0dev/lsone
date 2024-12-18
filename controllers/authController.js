@@ -2,8 +2,10 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs'); 
 const jwt = require('jsonwebtoken'); 
 const nodemailer = require("nodemailer");
- 
-const JWT_SECRET = "aSecret"; 
+require('dotenv').config();
+
+// const JWT_SECRET = "aSecret"; 
+const JWT_SECRET = process.env.jwt_secret; 
 const emailPass = "zcho znyl yrhj kyrx";
  
 exports.register = async (req, res) => { 
@@ -37,6 +39,15 @@ exports.register = async (req, res) => {
                 password: encryptedPassword,
                 role,
                 accountStatus: 'inactive',
+            });
+        }else if(role == 'Admin'){
+            await User.create({
+                name:name,
+                email:email,
+                mobile,
+                password: encryptedPassword,
+                role,
+                accountStatus: 'active',
             });
         }
         

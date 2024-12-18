@@ -37,10 +37,6 @@ app.get('/', (req, res)=>{
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
-
-
-
-
 app.listen(4021, ()=>{
     console.log('Server is running')
 })

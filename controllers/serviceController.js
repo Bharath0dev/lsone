@@ -1,5 +1,9 @@
-const Service = require('../models/Service');  
+const Service = require('../models/Service');
+const mongoose = require('mongoose');  
+require('dotenv').config();
 
+
+const JWT_SECRET = process.env.jwt_secret; 
 
 exports.newService = async (req, res) => { 
 
@@ -38,6 +42,11 @@ exports.getServicesAd = async (req, res) => {
 exports.getServices = async (req, res) => { 
     const { category } = req.query;
     try{
+        // const validToken = jwt.verify(token, JWT_SECRET);
+        // if (!validToken) {
+        //     return res.status(401).json({ message: 'Invalid token.' });
+        // }
+        
         const data = await Service.find({category});
         res.send({status: 'ok', data: data})
     }catch(error){
@@ -139,12 +148,38 @@ exports.getCategories = async (req, res) =>{
 
 exports.getServicesByProviders = async (req, res)=>{
     const {id} = req.query;
+
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).send({
+            success: false,
+            message: 'Invalid or missing service provider ID.',
+        });
+    }
+
+    
     try{
         const data = await Service.find({ serviceProviderId:id});
-        console.log(data)
-        res.send(data);
+         // Check if any services are found
+         if (data.length === 0) {
+            return res.status(404).send({
+                success: false,
+                message: 'No services found for the given service provider.',
+            });
+        }
+
+        // Respond with the found data
+        res.status(200).send({
+            success: true,
+            message: 'Services retrieved successfully.',
+            data,
+        });
     }catch(error){
-        console.log('getServicesByProviders error: ', error)
+        console.error('getServicesByProviders error:', error);
+        res.status(500).send({
+            success: false,
+            message: 'An error occurred while fetching services. Please try again later.',
+            error: error.message,
+        });
     }
 }
 

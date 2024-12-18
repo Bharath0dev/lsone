@@ -197,11 +197,13 @@ exports.updateUser = async (req, res) => {
             }
         }
 
-        res.send({ status: 'ok', data: 'updated' });
-    } catch (error) {
-        console.log(error);
+        // res.send({ status: 'ok', data: 'updated' });
+        res.status(200).json({ status: 'ok', message: 'User updated successfully' });
 
-        return res.send({ error: error });
+    } catch (error) {
+        console.log('Error updating user:', error);
+        res.status(500).json({ status: 'error', message: 'Internal server error' });
+    
     }
 };
 
@@ -209,15 +211,43 @@ exports.updateUser = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => { 
     try{
-        const data = await User.find({});
-        res.send({status: 'ok', data: data});
+        const users = await User.find({});
+
+        // If no users are found, send a message indicating this
+        if (users.length === 0) {
+            return res.status(404).json({
+                status: 'error',
+                message: 'No users found'
+            });
+        }
+
+        console.log('All users retrieved:', users);
+        return res.status(200).json({
+            status: 'ok',
+            data: users
+        });
+
+
     }catch(error){
-        return res.send({error: error});
+        console.log('Error fetching users:', error);
+        return res.status(500).json({
+            status: 'error',
+            message: 'An error occurred while fetching users.',
+            error: error.message
+        });
     }
 }; 
 
 exports.getUserData = async (req, res) => {
     const { role } = req.query;
+
+    // Input validation
+    if (!role) {
+        console.log('Role parameter is required');
+        return res.status(400).json({ status: 'error', message: 'Role parameter is required' });
+    }
+
+
     try{
         const dataCount = await User.find({role});
         const count = dataCount.length;
@@ -228,23 +258,43 @@ exports.getUserData = async (req, res) => {
         });
 
         console.log(userData)
-        res.send({status: 'ok', data: userData, count: count});
+        return res.status(200).json({ status: 'ok', data: userData, count });
 
     }catch(error){
-        return res.send({error: error});
+        console.log('Error while fetching user data:', error);
+
+        return res.status(500).json({
+            status: 'error',
+            message: 'An error occurred while fetching user data. Please try again later.',
+            error: error.message
+        });
     }
 }
 
 exports.getProviderData = async (req, res)=>{
     const { role } = req.query;
-    try{
-        const data = await User.find({role, accountStatus: 'active'});
-        const count = data.length;
-        console.log(data)
-        res.send({status: 'ok', data: data, count: count});
 
-    }catch(error){
-        return res.send({error: error});
+     // Input validation
+     if (!role) {
+        console.log('Role parameter is required');
+        return res.status(400).json({ status: 'error', message: 'Role parameter is required' });
+    }
+
+
+    try {
+        // Find users with the specified role and active accountStatus
+        const data = await User.find({ role, accountStatus: 'active' });
+
+        // Get the count of users
+        const count = data.length;
+
+        console.log('Found active users with role:', role, data);
+
+        return res.status(200).json({ status: 'ok', data, count });
+
+    } catch (error) {
+        console.error('Error while fetching provider data:', error);
+        return res.status(500).json({ status: 'error', message: 'An error occurred while fetching the provider data. Please try again later.' });
     }
 }
 
@@ -261,16 +311,32 @@ exports.getProviderData = async (req, res)=>{
 exports.deactivateUser = async(req, res) => {
     const {id}=req.body;
 
+    // Validate input
+    if (!id) {
+        console.log('User ID is required');
+        return res.status(400).json({ status: 'error', message: 'User ID is required' });
+    }
+
     try{
-        await User.findOneAndUpdate(
-            {_id:id},
-            {$set : {
-                accountStatus: 'deactivated'
-            }}
+        // Find user and update accountStatus to 'deactivated'
+        const result = await User.findOneAndUpdate(
+            { _id: id },
+            { $set: { accountStatus: 'deactivated' } },
+            { new: true } // Return the updated document
         );
-        res.send({status: 'ok', data: 'User-deleted'});
+
+        if (!result) {
+            console.log(`No user found with ID: ${id}`);
+            return res.status(404).json({ status: 'error', message: 'User not found' });
+        }
+
+        console.log(`User with ID: ${id} has been deactivated.`);
+        return res.status(200).json({ status: 'ok', data: 'User deactivated successfully' });
+  
     }catch(error){
-        return res.send({error: error});
+        console.error('Error while deactivating user:', error);
+        return res.status(500).json({ status: 'error', message: 'An error occurred while deactivating the user. Please try again later.' });
+   
     }
 }
 
@@ -298,12 +364,29 @@ exports.deleteProviderServiceImage = async (req, res)=>{
 exports.getProviderDetails = async (req, res)=>{
     const {providerId} = req.query;
 
+    // Check if providerId is provided
+    if (!providerId) {
+        return res.status(400).json({ error: 'Provider ID is required' });
+    }
+
+     // Validate that providerId is a valid MongoDB ObjectId
+     if (!mongoose.Types.ObjectId.isValid(providerId)) {
+        return res.status(400).json({ error: 'Invalid provider ID' });
+    }
+
     try{
         const result = await User.findById(providerId);
-        console.log(result);
-        res.send({ data: result });
+        if (!result) {
+            return res.status(404).json({ error: 'Provider not found' });
+        }
+
+        // Respond with the provider data
+        return res.status(200).json({ data: result });
     }catch(error){
-        console.log("error while getting providerData",error)
+        console.error('Error while getting provider data:', error);
+
+        // Respond with a 500 server error and a generic message
+        return res.status(500).json({ error: 'An error occurred while retrieving provider details. Please try again later.' });
     }
 }
 
@@ -312,12 +395,16 @@ exports.getRegistrationRequests = async (req, res) => {
     try{
         const result = await User.find({accountStatus: 'inactive'});
         const count = await User.countDocuments({ accountStatus: 'inactive' });
-        console.log('getRegistrationRequests-',result);
+        console.log('Inactive users found:', result.length, 'Count:', count);
 
-        res.send({ result, count });
-
+        // Send the result and count in the response
+        return res.status(200).json({ result, count });
     }catch(error){
         console.log('error while finding inative users-', error);
+        // Respond with a 500 status code and error message
+        return res.status(500).json({
+            error: 'An error occurred while retrieving registration requests. Please try again later.'
+        });
     }
 }
 
@@ -363,23 +450,39 @@ exports.updateAccountStatus = async (req, res) => {
 exports.updateOnHoldProviderData = async (req, res) => {
     const {address, experience, email, services, description} = req.body;
 
-    if( !address || !experience || !email || !description ){
-        console.log('no  values');
-        return;
+    // Validate input data
+    if (!address || !experience || !email || !description) {
+        console.log('Missing required fields: address, experience, email, or description');
+        return res.status(400).json({ status: 'error', message: 'All fields are required (address, experience, email, description)' });
     }
+
     try{
+                // Find the user by email and update the provider data
         const result = await User.findOneAndUpdate(
-            {email: email},
-            {$set: { address: address, 'providerDetails.experience': experience, 'providerDetails.preferences': services, 'providerDetails.description': description}}
+            { email: email },
+            { 
+                $set: { 
+                    address: address, 
+                    'providerDetails.experience': experience, 
+                    'providerDetails.preferences': services, 
+                    'providerDetails.description': description 
+                } 
+            },
+            { new: true } // Return the updated document
         );
-        console.log(result);
-        if(result){
-            res.send({result, status: 'ok'})
-        }else{
-            res.send({result, status: 'error'})
+
+        if (result) {
+            console.log('Provider data updated successfully:', result);
+            return res.status(200).json({ result, status: 'ok' });
+        } else {
+            console.log('No provider found with the given email:', email);
+            return res.status(404).json({ status: 'error', message: 'Provider not found with the given email' });
         }
+
     }catch(error){
         console.log('error while updateOnHoldProviderData-', error);
+        return res.status(500).json({ status: 'error', message: 'An error occurred while updating the provider data. Please try again later.' });
+
     }
 }
 
@@ -430,11 +533,26 @@ exports.getCountforProviderScreen = async (req, res) => {
         console.log('Date:', date);
 
         let unAvailableDatesCount = 0;
-        for(let i=0;i<unAvalableDates.unAvailableDates.length; i++){
-            if(unAvalableDates.unAvailableDates[i] >= date){
-                unAvailableDatesCount++;
+
+        // for(let i=0;i<unAvalableDates.unAvailableDates.length; i++){
+        //     if(unAvalableDates.unAvailableDates[i] >= date){
+        //         unAvailableDatesCount++;
+        //     }
+        // }
+
+        // Check if unAvailableDates exists and is an array
+        if (unAvalableDates && Array.isArray(unAvalableDates.unAvailableDates)) {
+            // Count how many unavailable dates are greater than or equal to today's date
+            for (let i = 0; i < unAvalableDates.unAvailableDates.length; i++) {
+                if (unAvalableDates.unAvailableDates[i] >= date) {
+                    unAvailableDatesCount++;
+                }
             }
+        } else {
+            console.log('No unavailable dates found for provider');
         }
+
+
         console.log(unAvailableDatesCount);
 
         console.log('pending count-', pendingRequestsCount);

@@ -29,6 +29,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+
   providerDetails: {
     // service_id:{
     //   type: mongoose.Schema.Types.ObjectId,
@@ -61,6 +62,7 @@ const userSchema = new mongoose.Schema({
       default: null
     },
   },
+  
   // location: {
   //   address: {
   //     type: String,
