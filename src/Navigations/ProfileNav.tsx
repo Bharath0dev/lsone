@@ -19,6 +19,7 @@ const ProfileNav = () => {
       <Stack.Screen name="Profilepage" component={ProfileScreen}/>
       <Stack.Screen name='UpdateProfile' component={UpdateProfile}/>
       {/* <Stack.Screen name='LoginProfile' component={LoginPage}/> */}
+      <Stack.Screen name='LoginProfile' component={LoginPage}/>
 
     </Stack.Navigator>
   )
